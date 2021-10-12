@@ -1,6 +1,6 @@
 {
-  "short_name": "Fantasy Realms",
-  "name": "Fantasy Realms: App of Scoring",
+  "short_name": "Star Trek Missions",
+  "name": "Star Trek Missions: Scoring App",
   "start_url": "index.html",
   "icons": [{
       "src": "icons/android-icon-36x36.png",

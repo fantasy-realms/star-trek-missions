@@ -1,14 +1,13 @@
-var APP_PREFIX = 'fantasy-realms-';
-var VERSION = '1.0.21';
+var APP_PREFIX = 'star-trek-missions-';
+var VERSION = '0.0.1';
 var CACHE_NAME = APP_PREFIX + VERSION;
 var URLS = [
   '/',
   'index.html',
   'manifest.json',
   'favicon.ico',
-  'img/fantasy-realms.jpg',
+  'img/star-trek-missions.png',
   'img/background.jpg',
-  'img/cursed-hoard.png',
   'img/wizkids.png',
   'img/globe.png',
   'css/style.css',
@@ -16,18 +15,12 @@ var URLS = [
   'service-worker.js',
   'js/app.js',
   'js/deck.js',
-  'js/discard.js',
   'js/hand.js',
   'js/bootstrap.bundle.min.js',
   'js/handlebars.min-v4.7.7.js',
   'js/jquery.i18n.properties.min.js',
   'js/jquery-3.6.0.min.js',
   'i18n/Messages.properties',
-  'i18n/Messages_en.properties',
-  'i18n/Messages_de.properties',
-  'i18n/Messages_es.properties',
-  'i18n/Messages_fr.properties',
-  'i18n/Messages_ua.properties',
   'sound/clear.mp3',
   'sound/click.mp3',
   'sound/magic.mp3',
@@ -56,7 +49,10 @@ var URLS = [
   'icons/ms-icon-144x144.png',
   'icons/ms-icon-150x150.png',
   'icons/ms-icon-310x310.png',
-  'icons/ms-icon-70x70.png'
+  'icons/ms-icon-70x70.png',
+  'icons/affiliation.png',
+  'icons/specialty.png',
+  'icons/lifeform.png'
 ];
 
 self.addEventListener('fetch', function (e) {

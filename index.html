@@ -1,9 +1,9 @@
-<html lang="en" manifest="fantasy-realms.appcache">
+<html lang="en" manifest="star-trek-missions.appcache">
 
 <head>
   <meta charset="utf-8">
-  <title>Fantasy Realms: App of Scoring</title>
-  <meta name="description" content="Fantasy Realms: App of Scoring">
+  <title>Star Trek Missions: Scoring App</title>
+  <meta name="description" content="Star Trek Missions: Scoring App">
   <meta name="author" content="Jimmy Praet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="msapplication-TileColor" content="#ffffff">
@@ -30,33 +30,23 @@
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="js/handlebars.min-v4.7.7.js"></script>
   <script src="js/deck.js"></script>
-  <script src="js/discard.js"></script>
   <script src="js/hand.js"></script>
   <script src="js/app.js"></script>
 </head>
 
 <body>
   <script id="cards-template" type="text/x-handlebars-template">
-    {{#each suits}}
+    {{#each types}}
     <div class="card">
       <div class="card-header" role="tab" id="{{@key}}-header" data-toggle="collapse" data-target="#{{@key}}" data-parent="#cards" href="#{{@key}}" aria-expanded="false" aria-controls="{{@key}}">
-        <a>{{{i18n 'suit.' @key}}}</a>
+        <a>{{{i18n 'type.' @key}}}</a>
       </div>
       <div id="{{@key}}" class="collapse" role="tabpanel" data-parent="#cards" aria-labelledby="{{@key}}-header">
         <ul class="list-group">
           {{#each this}}
-          <li class="list-group-item {{suit}}" onclick="addToView('{{id}}')"><span class="badge badge-secondary">{{strength}}</span> {{{i18n id '.name'}}}</li>
+          <li class="list-group-item {{@../key}}" onclick="addToView('{{id}}')">{{{i18n id '.name'}}}</li>
           {{/each}}
         </ul>
-      </div>
-    </div>
-    {{/each}}
-  </script>
-  <script id="suit-selection-template" type="text/x-handlebars-template">
-    {{#each suits}}
-    <div class="card">
-      <div class="card-header suit-selection" onclick="selectSuit('{{this}}')">
-        {{{i18n 'suit.' this}}}
       </div>
     </div>
     {{/each}}
@@ -65,14 +55,7 @@
     {{#each playerCards}}
     <div id="card-{{id}}" class="card" onclick="selectFromHand('{{id}}')">
       <ul class="list-group">
-        <li class="list-group-item {{suit}} {{#if blanked}}blanked{{/if}}">
-          <span class="badge badge-secondary">
-            {{#if blanked}}
-              {{i18n 'label.blanked'}}
-            {{else}}
-              {{strength}}
-            {{/if}}
-          </span> 
+        <li class="list-group-item {{#each type}}{{this}} {{/each}} {{#if blanked}}blanked{{/if}}">
           {{#if impersonator}}
             {{#if magic}}
               {{{i18n actionData.[0] '.name'}}}
@@ -87,82 +70,169 @@
           {{/if}}
           <span class="float-right points">{{points}}</span>
         </li>
-        {{#if timing}}
-        <li class="list-group-item timing">
-          <b>{{{i18n 'timing.' timing}}}:</b>
-        </li>
-        {{/if}}
-        {{#if bonus}}
-        <li class="list-group-item bonus {{#if blanked}}blanked{{/if}}">
-          {{{i18n id '.bonus'}}}
-          {{#if bonusPoints}}
-          <span class="float-right bonus">+{{bonusPoints}}</span>
+        {{#if hasTags}}
+        <li class="list-group-item tags {{#if blanked}}blanked{{/if}}">
+          {{#if specialty.length}}
+            <span class="specialty">
+              <span>
+              {{#each specialty}}
+                {{{i18n 'specialty.' this}}}{{#unless @last}}, {{/unless}}
+              {{/each}}
+              </span>
+            </span>
+          {{/if}}
+          {{#if lifeform.length}}
+            <span class="lifeform">
+              <span>
+              {{#each lifeform}}
+                {{{i18n 'lifeform.' this}}}{{#unless @last}}, {{/unless}}
+              {{/each}}
+              </span>
+            </span>
+          {{/if}}
+          {{#if affiliation.length}}
+            <span class="affiliation">
+              <span>
+              {{#each affiliation}}
+                {{{i18n 'affiliation.' this}}}{{#unless @last}}, {{/unless}}
+              {{/each}}
+              </span>
+            </span>
           {{/if}}
         </li>
         {{/if}}
-        {{#if penalty}}
-        <li class="list-group-item penalty {{#if blanked}}blanked{{/if}} {{#if penaltyCleared}}cleared{{/if}}">
-          {{#if card.penalty}}
-            {{{i18n id '.penalty'}}}
-          {{else}}
-            <!-- Doppelgänger penalty -->
-            {{{i18n actionData.[0] '.penalty'}}}
-          {{/if}}
-          {{#if penaltyPoints}}
-          <span class="float-right penalty">{{penaltyPoints}}</span>
-          {{/if}}
+        <li class="list-group-item text {{#if blanked}}blanked{{/if}}">
+          {{{i18n id '.text'}}}
+          {{#ifEquals id 'G48'}}
+            <table>
+              <tr>
+                <td></td>
+                <td>
+                  <select id="G48-type" onclick="event.stopPropagation();" onchange="modifyUnidentifiedShip();" style="width: 100%;">
+                    <option value="" {{#unless type.length}}selected{{/unless}}>-- {{{i18n 'label.choose.type'}}} --</option>
+                    <option value="personnel" {{#ifEquals type 'personnel'}}selected{{/ifEquals}}>{{{i18n 'type.personnel'}}}</option>
+                    <option value="civilian" {{#ifEquals type 'civilian'}}selected{{/ifEquals}}>{{{i18n 'type.civilian'}}}</option>
+                    <option value="captain" {{#ifEquals type 'captain'}}selected{{/ifEquals}}>{{{i18n 'type.captain'}}}</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="lifeform"></span></td>
+                <td>
+                  <select id="G48-lifeform" onclick="event.stopPropagation();" onchange="modifyUnidentifiedShip();" style="width: 100%;">
+                    <option value="" {{#unless lifeform.length}}selected{{/unless}}>-- {{{i18n 'label.choose.lifeform'}}} --</option>
+                    <option value="android" {{#ifEquals lifeform 'android'}}selected{{/ifEquals}}>{{{i18n 'lifeform.android'}}}</option>
+                    <option value="betazoid" {{#ifEquals lifeform 'betazoid'}}selected{{/ifEquals}}>{{{i18n 'lifeform.betazoid'}}}</option>
+                    <option value="crystal" {{#ifEquals lifeform 'crystal'}}selected{{/ifEquals}}>{{{i18n 'lifeform.crystal'}}}</option>
+                    <option value="el-aurian" {{#ifEquals lifeform 'el-aurian'}}selected{{/ifEquals}}>{{{i18n 'lifeform.el-aurian'}}}</option>
+                    <option value="ferengi" {{#ifEquals lifeform 'ferengi'}}selected{{/ifEquals}}>{{{i18n 'lifeform.ferengi'}}}</option>
+                    <option value="hologram" {{#ifEquals lifeform 'hologram'}}selected{{/ifEquals}}>{{{i18n 'lifeform.hologram'}}}</option>
+                    <option value="human" {{#ifEquals lifeform 'human'}}selected{{/ifEquals}}>{{{i18n 'lifeform.human'}}}</option>
+                    <option value="klingon" {{#ifEquals lifeform 'klingon'}}selected{{/ifEquals}}>{{{i18n 'lifeform.klingon'}}}</option>
+                    <option value="romulan" {{#ifEquals lifeform 'romulan'}}selected{{/ifEquals}}>{{{i18n 'lifeform.romulan'}}}</option>
+                    <option value="vulcan" {{#ifEquals lifeform 'vulcan'}}selected{{/ifEquals}}>{{{i18n 'lifeform.vulcan'}}}</option>
+                  </select>
+              </td>
+              </tr>
+              <tr>
+                <td><span class="affiliation"></span></td>
+                <td>
+                  <select id="G48-affiliation" onclick="event.stopPropagation();" onchange="modifyUnidentifiedShip();" style="width: 100%;">
+                    <option value="" {{#unless affiliation.length}}selected{{/unless}}>-- {{{i18n 'label.choose.affiliation'}}} --</option>
+                    <option value="federation" {{#ifEquals affiliation 'federation'}}selected{{/ifEquals}}>{{{i18n 'affiliation.federation'}}}</option>
+                    <option value="ferengi-alliance" {{#ifEquals affiliation 'ferengi-alliance'}}selected{{/ifEquals}}>{{{i18n 'affiliation.ferengi-alliance'}}}</option>
+                    <option value="hostile" {{#ifEquals affiliation 'hostile'}}selected{{/ifEquals}}>{{{i18n 'affiliation.hostile'}}}</option>
+                    <option value="klingon-empire" {{#ifEquals affiliation 'klingon-empire'}}selected{{/ifEquals}}>{{{i18n 'affiliation.klingon-empire'}}}</option>
+                    <option value="romulan-star-empire" {{#ifEquals affiliation 'romulan-star-empire'}}selected{{/ifEquals}}>{{{i18n 'affiliation.romulan-star-empire'}}}</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="specialty"></span></td>
+                <td>
+                  <select id="G48-specialty" onclick="event.stopPropagation();" onchange="modifyUnidentifiedShip();" style="width: 100%;">
+                    <option value="" {{#unless specialty.length}}selected{{/unless}}>-- {{{i18n 'label.choose.specialty'}}} --</option>
+                    <option value="ambassador" {{#ifEquals specialty 'ambassador'}}selected{{/ifEquals}}>{{{i18n 'specialty.ambassador'}}}</option>
+                    <option value="archaeologist" {{#ifEquals specialty 'archaeologist'}}selected{{/ifEquals}}>{{{i18n 'specialty.archaeologist'}}}</option>
+                    <option value="combat" {{#ifEquals specialty 'combat'}}selected{{/ifEquals}}>{{{i18n 'specialty.combat'}}}</option>
+                    <option value="command" {{#ifEquals specialty 'command'}}selected{{/ifEquals}}>{{{i18n 'specialty.command'}}}</option>
+                    <option value="cosmic" {{#ifEquals specialty 'cosmic'}}selected{{/ifEquals}}>{{{i18n 'specialty.cosmic'}}}</option>
+                    <option value="counselor" {{#ifEquals specialty 'counselor'}}selected{{/ifEquals}}>{{{i18n 'specialty.counselor'}}}</option>
+                    <option value="engineer" {{#ifEquals specialty 'engineer'}}selected{{/ifEquals}}>{{{i18n 'specialty.engineer'}}}</option>
+                    <option value="medical" {{#ifEquals specialty 'medical'}}selected{{/ifEquals}}>{{{i18n 'specialty.medical'}}}</option>
+                    <option value="science" {{#ifEquals specialty 'science'}}selected{{/ifEquals}}>{{{i18n 'specialty.science'}}}</option>
+                    <option value="security" {{#ifEquals specialty 'security'}}selected{{/ifEquals}}>{{{i18n 'specialty.security'}}}</option>
+                    <option value="weapon" {{#ifEquals specialty 'weapon'}}selected{{/ifEquals}}>{{{i18n 'specialty.weapon'}}}</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+          {{/ifEquals}}
+          {{#ifEquals id ../thoughtMakerTarget}}
+            <table>
+              <tr>
+                <td><span class="affiliation"></span></td>
+                <td>
+                  <select id="G41-affiliation" onclick="event.stopPropagation();" onchange="modifyThoughtMakerAffiliation();">
+                    <option value="federation" {{#ifEquals affiliation 'federation'}}selected{{/ifEquals}}>{{{i18n 'affiliation.federation'}}}</option>
+                    <option value="ferengi-alliance" {{#ifEquals affiliation 'ferengi-alliance'}}selected{{/ifEquals}}>{{{i18n 'affiliation.ferengi-alliance'}}}</option>
+                    <option value="hostile" {{#ifEquals affiliation 'hostile'}}selected{{/ifEquals}}>{{{i18n 'affiliation.hostile'}}}</option>
+                    <option value="klingon-empire" {{#ifEquals affiliation 'klingon-empire'}}selected{{/ifEquals}}>{{{i18n 'affiliation.klingon-empire'}}}</option>
+                    <option value="romulan-star-empire" {{#ifEquals affiliation 'romulan-star-empire'}}selected{{/ifEquals}}>{{{i18n 'affiliation.romulan-star-empire'}}}</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+          {{/ifEquals}}
         </li>
-        {{/if}}
+        {{#ifEquals id 'M02'}}
+        <li class="list-group-item text">
+            <span id="card-action-text-{{id}}"></span>
+            <span class="float-right">
+              <button id="borg-cube-0" type="button" class="btn btn-sm btn-primary" onclick="event.stopPropagation(); useBorgCube(0);">
+                {{#if actionData.[0]}}
+                  {{{i18n actionData.[0] '.name'}}} <b>(+{{points}})</b>
+                {{else}}
+                  {{{i18n 'button.use'}}}
+                {{/if}}
+              </button>
+              <button id="cancel-borg-cube-0" style="display: none;" type="button" class="btn btn-sm btn-primary" onclick="event.stopPropagation(); cancelBorgCube(0);">
+                {{{i18n 'button.cancel'}}}
+              </button>
+              &nbsp;
+              <button id="borg-cube-1" type="button" class="btn btn-sm btn-primary" onclick="event.stopPropagation(); useBorgCube(1);">
+                {{#if actionData.[1]}}
+                  {{{i18n actionData.[1] '.name'}}} <b>(+{{points}})</b>
+                {{else}}
+                  {{{i18n 'button.use'}}}
+                {{/if}}
+              </button>
+              <button id="cancel-borg-cube-1" style="display: none;" type="button" class="btn btn-sm btn-primary" onclick="event.stopPropagation(); cancelBorgCube(1);">
+                {{{i18n 'button.cancel'}}}
+              </button>
+            </span>
+        </li>
+        {{/ifEquals}}
         {{#if card.action}}
-        <li class="list-group-item bonus">
+        <li class="list-group-item text">
             <span id="card-action-text-{{id}}"></span>
             <button id="card-action-use-{{id}}" type="button" class="btn btn-sm btn-primary float-right" onclick="event.stopPropagation(); useCardAction('{{id}}');">{{{i18n 'button.use'}}}</button>
             <button id="card-action-cancel-{{id}}" style="display: none;" type="button" class="btn btn-sm btn-primary float-right" onclick="event.stopPropagation(); cancelCardAction('{{id}}');">{{i18n 'button.cancel'}}</button>
         </li>
         {{/if}}
-        {{#if card.referencesPlayerCount}}
-        <li class="list-group-item bonus">
-          <span id="card-action-text-{{id}}">
-            {{i18n 'label.player-count'}} ({{../playerCount}}):
-            {{#each ../playerCounts}}
-              <button type="button" class="btn btn-sm btn-primary" onclick="event.stopPropagation(); setPlayerCount({{this}});">{{this}}</button>
-            {{/each}}
-          </span>
-        </li>
-        {{/if}}
-        {{#if card.referencesDiscardArea}}
-        <li class="list-group-item bonus">
-          <button type="button" onclick="event.stopPropagation(); switchToDiscardArea('{{id}}');" class="btn btn-sm btn-primary float-right">{{i18n 'button.discard-area'}}</button>
-        </li>
-        {{/if}}
-      </ul>
-    </div>
-    {{/each}}
-  </script>
-  <script id="discard-template" type="text/x-handlebars-template">
-    <div id="discard-header">
-      <span>{{i18n 'label.discard-area'}}</span>
-      <button type="button" onclick="event.stopPropagation(); switchToHand();" class="btn btn-sm btn-primary float-right">{{i18n 'button.back-to-hand'}}</button>
-    </div>
-    {{#each discard}}
-    <div id="discard-{{id}}" class="card" onclick="removeFromDiscard('{{id}}')">
-      <ul class="list-group">
-        <li class="list-group-item {{suit}}">
-          {{i18n id '.name'}}
-        </li>
       </ul>
     </div>
     {{/each}}
   </script>
   <div id="container">
     <header>
-      <a href="https://wizkids.com/fantasy-realms/"><img src="img/fantasy-realms.jpg" style="height: 3rem; max-width: 100%;"></img></a>
+      <a href="https://wizkids.com/star-trek-missions-a-fantasy-realms-game/"><img src="img/star-trek-missions.png" style="height: 3rem; max-width: 100%;"></img></a>
       <div id="header-right">
         <div id="hand-info">
           <span id="cardCount">0</span><span class="separator">/</span><span id="cardLimit">7</span>
           <span id="points">000</span>
         </div>
-        <button id="clear" type="button" class="btn btn-success" onclick="reset()">Reset</button>
+        <button id="clear" type="button" class="btn btn-info" onclick="reset()">Reset</button>
       </div>
     </header>
     <main>
@@ -171,17 +241,6 @@
       </div>
       <div id="right">
         <div id="settings" style="display: none;">
-          <img src="img/cursed-hoard.png" style="height: 3.5rem;"></img>
-          <div style="display: inline-block;">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="ch_items">
-              <label id="lbl_ch_items" class="custom-control-label" for="ch_items">Cursed Items</label>
-            </div>
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="ch_suits">
-              <label id="lbl_ch_suits" class="custom-control-label" for="ch_suits">Buildings/Outsiders/Undead</label>
-            </div>
-          </div>
           <div id="language" class="dropdown">
             <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="language-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <img src="img/globe.png" style="height: 1rem;"></img>
@@ -189,10 +248,6 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="language-selector">
               <a id="lang-en" class="dropdown-item" href="#" onclick="selectLanguage('en')">English</a>
-              <a id="lang-de" class="dropdown-item" href="#" onclick="selectLanguage('de')">Deutsch</a>
-              <a id="lang-de" class="dropdown-item" href="#" onclick="selectLanguage('es')">Español</a>
-              <a id="lang-fr" class="dropdown-item" href="#" onclick="selectLanguage('fr')">Français</a>
-              <a id="lang-ua" class="dropdown-item" href="#" onclick="selectLanguage('ua')">Українська</a>
             </div>
           </div>
           <div id="sound">
@@ -203,8 +258,6 @@
           </div>
         </div>
         <div id="hand">
-        </div>
-        <div id="discard">
         </div>
       </div>
     </main>

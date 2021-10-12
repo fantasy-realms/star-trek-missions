@@ -1,19 +1,17 @@
 :root {
-  --land-color: #3b1d13;
-  --flood-color:  #41437c;
-  --weather-color: #a6bced;
-  --flame-color: #b44347;
-  --army-color: #312b2f;
-  --wizard-color: #e056a3;
-  --leader-color: #7b48a4;
-  --beast-color: #60a35c;
-  --weapon-color: #878586;
-  --artifact-color: #d24e37;
+  --captain-color: #ee2725;
+  --personnel-color:  #5d3354;
+  --civilian-color: #938c3b;
+  --equipment-color: #275d69;
+  --system-color: #6a64a5;
+  --location-color: #00a99d;
+  --artifact-color: #e78820;
+  --entity-color: #005833;
   --wild-color: #c6c2c3;
-  --building-color: #463153;
-  --outsider-color: #fba934;
-  --undead-color: #004e4a;
-  --cursed-item-color: #900c3f;
+  --mission-color: #000000;
+  --specialty-color: #00a651;
+  --lifeform-color: #00a1e4;
+  --affiliation-color: #cbc304;
   --header-border: 6px;
 }
 
@@ -46,7 +44,7 @@ body {
 header {
   position: fixed;
   z-index: 1;
-  background-color: #6f292b;
+  background-color: #384260;
   height: 4rem;
   padding: 0.5rem;
   width: 100%;
@@ -81,15 +79,15 @@ main {
 }
 
 #points {
-  color: #c3a332;
+  color: #b7e4c7;
 }
 
 #cardCount, #cardLimit {
-  color: #995153;
+  color: #bfc5d9;
 }
 
 span.separator {
-  color: #995153;
+  color: #bfc5d9;
 }
 
 #left {
@@ -132,112 +130,76 @@ li.list-group-item {
   font-size: 0.9rem;
 }
 
-li.land {
-  background-color: var(--land-color);
+li.captain {
+  background-color: var(--captain-color);
 }
 
-span.land {
-  color: var(--land-color);
+span.captain {
+  color: var(--captain-color);
 }
 
-#land-header {
-  border-right: solid var(--land-color) var(--header-border);
+#captain-header {
+  border-right: solid var(--captain-color) var(--header-border);
 }
 
-li.flood {
-  background-color: var(--flood-color);
+li.personnel {
+  background-color: var(--personnel-color);
 }
 
-span.flood {
-  color: var(--flood-color);
+span.personnel {
+  color: var(--personnel-color);
 }
 
-#flood-header {
-  border-right: solid var(--flood-color) var(--header-border);
+#personnel-header {
+  border-right: solid var(--personnel-color) var(--header-border);
 }
 
-li.weather {
-  background-color: var(--weather-color);
+li.civilian {
+  background-color: var(--civilian-color);
 }
 
-span.weather {
-  color: var(--weather-color);
+span.civilian {
+  color: var(--civilian-color);
 }
 
-#weather-header {
-  border-right: solid var(--weather-color) var(--header-border);
+#civilian-header {
+  border-right: solid var(--civilian-color) var(--header-border);
 }
 
-li.flame {
-  background-color: var(--flame-color);
+li.equipment {
+  background-color: var(--equipment-color);
 }
 
-span.flame {
-  color: var(--flame-color);
+span.equipment {
+  color: var(--equipment-color);
 }
 
-#flame-header {
-  border-right: solid var(--flame-color) var(--header-border);
+#equipment-header {
+  border-right: solid var(--equipment-color) var(--header-border);
 }
 
-li.army {
-  background-color: var(--army-color);
+li.system {
+  background-color: var(--system-color);
 }
 
-span.army {
-  color: var(--army-color);
+span.system {
+  color: var(--system-color);
 }
 
-#army-header {
-  border-right: solid var(--army-color) var(--header-border);
+#system-header {
+  border-right: solid var(--system-color) var(--header-border);
 }
 
-li.wizard {
-  background-color: var(--wizard-color);
+li.location {
+  background-color: var(--location-color);
 }
 
-span.wizard {
-  color: var(--wizard-color);
+span.location {
+  color: var(--location-color);
 }
 
-#wizard-header {
-  border-right: solid var(--wizard-color) var(--header-border);
-}
-
-li.leader {
-  background-color: var(--leader-color);
-}
-
-span.leader {
-  color: var(--leader-color);
-}
-
-#leader-header {
-  border-right: solid var(--leader-color) var(--header-border);
-}
-
-li.beast {
-  background-color: var(--beast-color);
-}
-
-span.beast {
-  color: var(--beast-color);
-}
-
-#beast-header {
-  border-right: solid var(--beast-color) var(--header-border);
-}
-
-li.weapon {
-  background-color: var(--weapon-color);
-}
-
-span.weapon {
-  color: var(--weapon-color);
-}
-
-#weapon-header {
-  border-right: solid var(--weapon-color) var(--header-border);
+#location-header {
+  border-right: solid var(--location-color) var(--header-border);
 }
 
 li.artifact {
@@ -252,6 +214,18 @@ span.artifact {
   border-right: solid var(--artifact-color) var(--header-border);
 }
 
+li.entity {
+  background-color: var(--entity-color);
+}
+
+span.entity {
+  color: var(--entity-color);
+}
+
+#entity-header {
+  border-right: solid var(--entity-color) var(--header-border);
+}
+
 li.wild {
   background-color: var(--wild-color);
 }
@@ -264,66 +238,34 @@ span.wild {
   border-right: solid var(--wild-color) var(--header-border);
 }
 
-li.building {
-  background-color: var(--building-color);
+li.mission {
+  background-color: var(--mission-color);
 }
 
-span.building {
-  color: var(--building-color);
+span.mission {
+  color: var(--mission-color);
 }
 
-#building-header {
-  border-right: solid var(--building-color) var(--header-border);
+#mission-header {
+  border-right: solid var(--mission-color) var(--header-border);
 }
 
-li.outsider {
-  background-color: var(--outsider-color);
-}
-
-span.outsider {
-  color: var(--outsider-color);
-}
-
-#outsider-header {
-  border-right: solid var(--outsider-color) var(--header-border);
-}
-
-li.undead {
-  background-color: var(--undead-color);
-}
-
-span.undead {
-  color: var(--undead-color);
-}
-
-#undead-header {
-  border-right: solid var(--undead-color) var(--header-border);
-}
-
-li.cursed-item {
-  background-color: var(--cursed-item-color);
-}
-
-span.cursed-item {
-  color: var(--cursed-item-color);
-}
-
-#cursed-item-header {
-  border-right: solid var(--cursed-item-color) var(--header-border);
+li.system.location {
+  background-image: linear-gradient(to right, var(--system-color), var(--location-color), var(--system-color), var(--location-color));
 }
 
 #cards {
   background-color: #ccc0a8;
 }
 
-#cards .card-header, #hand .card-header, #discard .card-header {
+#cards .card-header, #hand .card-header {
   padding: 0.4rem;
   font-weight: bold;
   background-color: #ccc0a8;
   cursor: pointer;
 }
 
-#hand, #discard, #settings {
+#hand, #settings {
   background-color: #e9e3c6;
   padding: 0.4rem;
   font-weight: bold;
@@ -339,15 +281,7 @@ span.cursed-item {
   margin-top: 0.5rem;
 }
 
-#discard {
-  display: none;
-}
-
-#discard-header {
-  height: 2.5rem;
-}
-
-#cards li, #hand li, #discard li {
+#cards li, #hand li {
   font-weight: bold;
   padding: 0.4rem;
   cursor: pointer;
@@ -357,7 +291,7 @@ span.cursed-item {
   padding-right: 0;
 }
 
-#hand li.bonus, #hand li.penalty, #hand li.timing {
+#hand li.text, li.tags {
   background-color: #fffafa;
   color: grey;
   font-weight: normal;
@@ -365,13 +299,19 @@ span.cursed-item {
   border: 0;
 }
 
-#hand li.timing {
-  padding-bottom: 0;
-  margin-bottom: 0;
+#hand li.tags {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 0px;
+  margin-bottom: 0px;
 }
 
 #hand li span {
   font-weight: bold;
+}
+
+#hand li.tags span {
+  font-weight: normal;
 }
 
 #hand li.blanked {
@@ -379,21 +319,13 @@ span.cursed-item {
   filter: grayscale(100%);
 }
 
-#hand div.card, #discard div.card {
+#hand div.card {
   margin-bottom: 0.4rem;
   cursor: pointer;
 }
 
 span.badge-default {
   min-width: 1.5rem;
-}
-
-span.bonus {
-  color: green;
-}
-
-span.penalty {
-  color: red;
 }
 
 .cleared, .cleared:hover {
@@ -404,6 +336,71 @@ button {
   cursor: pointer;
 }
 
-#cards div.suit-selection {
-  background-color: #aed77b;
+li.text span.specialty::after, li.text span.lifeform::after, li.text span.affiliation::after {
+  background-size: 1rem 1rem;
+  display: inline-block;
+  width: 1rem; 
+  height: 1rem;
+  margin-left: 5px;
+  content:"";
+}
+
+li.text span.specialty::after {
+  background-image: url('../icons/specialty.png');
+}
+
+li.text span.lifeform::after {
+  background-image: url('../icons/lifeform.png');
+}
+
+li.text span.affiliation::after {
+  background-image: url('../icons/affiliation.png');
+}
+
+li.tags span.specialty::before, li.tags span.lifeform::before, li.tags span.affiliation::before {
+  background-size: 1rem 1rem;
+  display: inline-block;
+  width: 1rem; 
+  height: 1rem;
+  content:"";
+  vertical-align: middle;
+}
+
+li.tags span.specialty::before {
+  background-image: url('../icons/specialty.png');
+}
+
+li.tags span.lifeform::before {
+  background-image: url('../icons/lifeform.png');
+}
+
+li.tags span.affiliation::before {
+  background-image: url('../icons/affiliation.png');
+}
+
+li.tags span span {
+  border-bottom: solid 2px;
+  border-right: solid 4px;
+  border-radius: 6px;
+  border-bottom-left-radius: 2px;
+  padding-right: 5px;
+  padding-bottom: 2px;
+  margin-right: 5px;
+  white-space: collapse;
+}
+
+li.tags span.specialty span {
+  border-color: var(--specialty-color);
+}
+
+li.tags span.lifeform span {
+  border-color: var(--lifeform-color);
+}
+
+li.tags span.affiliation span {
+  border-color: var(--affiliation-color);
+}
+
+span.card-name {
+  font-style: italic;
 }

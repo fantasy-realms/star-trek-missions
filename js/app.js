@@ -12,12 +12,12 @@ Handlebars.registerHelper('i18n', function() {
   }
 });
 
+Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
+  return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+});
+
 var languages = {
-  'en': 'English',
-  'de': 'Deutsch',
-  'es': 'Español',
-  'fr': 'Français',
-  'ua': 'Українська',
+  'en': 'English'
 }
 
 $(document).ready(function() {
@@ -30,17 +30,8 @@ $(document).ready(function() {
     language: lang,
     async: true,
     callback: function() {
-      configureSelectedPlayerCount();
-      configureSelectedExpansions();
       showCards();
-      getDiscardFromQueryString();
       getHandFromQueryString();
-      $('#ch_items').change(function() {
-        toggleCursedHoardItems();
-      });
-      $('#ch_suits').change(function() {
-        toggleCursedHoardSuits();
-      });
       $('#sound-state').change(function () {
         toggleSound();
       });
@@ -54,12 +45,8 @@ var swoosh = new Audio('sound/swoosh.mp3');
 var clear = new Audio('sound/clear.mp3');
 var magic = new Audio('sound/magic.mp3');
 var actionId = NONE;
-var bookOfChangesSelectedCard = NONE;
-var bookOfChangesSelectedSuit = undefined;
-var cursedHoardItems = false;
-var cursedHoardSuits = false;
-var playerCount = 4;
-var inputDiscardArea = false;
+var selectedCard = NONE;
+var borgCubeIx = NONE;
 
 function selectLanguage(lang) {
   localStorage.setItem('language', lang);
@@ -80,102 +67,20 @@ function selectLanguage(lang) {
 
 function updateLabels(lang) {
   $('#clear').html(jQuery.i18n.prop('button.reset'));
-  $('#lbl_ch_items').html(jQuery.i18n.prop('label.cursed-hoard.items'));
-  $('#lbl_ch_suits').html(jQuery.i18n.prop('label.cursed-hoard.suits'));
   $('#sound-label').html(jQuery.i18n.prop('button.sound'));
   $('#selected-language').html(languages[lang]);
   $('#language .dropdown-item').removeClass('active');
   $('#lang-' + lang).addClass('active');
 }
 
-function configureSelectedExpansions() {
-  if (window.location.search) {
-    var params = window.location.search.substring(1).split('&');
-    for (var i = 0; i < params.length; i++) {
-      var param = params[i].split('=');
-      if (param[0] === 'expansions') {
-        if (param[1].indexOf('ch_items') > -1) {
-          cursedHoardItems = true;
-          deck.enableCursedHoardItems();
-          $('#ch_items').prop('checked', true);
-        }
-        if (param[1].indexOf('ch_suits') > -1) {
-          cursedHoardSuits = true;
-          deck.enableCursedHoardSuits();
-          $('#ch_suits').prop('checked', true);
-        }
-        return;
-      }
-    }
-  } 
-  if (localStorage.getItem('ch_items') === true || localStorage.getItem('ch_items') === 'true') {
-    cursedHoardItems = true;
-    deck.enableCursedHoardItems();
-    $('#ch_items').prop('checked', true);
-  }
-  if (localStorage.getItem('ch_suits') === true || localStorage.getItem('ch_suits') === 'true') {
-    cursedHoardSuits = true;
-    deck.enableCursedHoardSuits();
-    $('#ch_suits').prop('checked', true);
-  }  
-}
-
-function configureSelectedPlayerCount() {
-  if (window.location.search) {
-    var params = window.location.search.substring(1).split('&');
-    for (var i = 0; i < params.length; i++) {
-      var param = params[i].split('=');
-      if (param[0] === 'playerCount') {
-        playerCount = param[1];
-        return;
-      }
-    }
-  } 
-  if (localStorage.getItem('playerCount')) {
-      playerCount = localStorage.getItem('playerCount');
-  }
-}
-
-function toggleCursedHoardItems() {
-  cursedHoardItems = !cursedHoardItems;
-  localStorage.setItem('ch_items', cursedHoardItems);
-  if (cursedHoardItems) {
-    deck.enableCursedHoardItems();
-  } else {
-    deck.disableCursedHoardItems();
-  }
-  reset();
-}
-
-function toggleCursedHoardSuits() {
-  cursedHoardSuits = !cursedHoardSuits;
-  localStorage.setItem('ch_suits', cursedHoardSuits);
-  if (cursedHoardSuits) {
-    deck.enableCursedHoardSuits();
-  } else {
-    deck.disableCursedHoardSuits();
-  }
-  reset();
-}
-
-function setPlayerCount(count) {
-  click.play();
-  playerCount = count;
-  localStorage.setItem('playerCount', playerCount);
-  updateHandView();
-}
-
 function reset() {
   clear.play();
-  discard.clear();
   hand.clear();
   showCards();
   updateHandView();
   actionId = NONE;
-  bookOfChangesSelectedCard = NONE;
-  bookOfChangesSelectedSuit = undefined;
-  inputDiscardArea = false;
-  $("#discard").hide();
+  selectedCard = NONE;
+  borgCubeIx = NONE;
   $("#hand").show();
 }
 
@@ -185,91 +90,51 @@ function toggleSound() {
 }
 
 function addToView(id) {
-  if (inputDiscardArea) {
-    if (discard.addCard(deck.getCardById(id))) {
-      click.play();
-      updateDiscardAreaView();
-    }
-  } else {
-    if ([SHAPESHIFTER, CH_SHAPESHIFTER, MIRAGE, CH_MIRAGE].includes(actionId)) {
-      click.play();
-      magic.play();
-      var duplicator = hand.getCardById(actionId);
-      duplicator.actionData = [id];
-      showCards();
-      updateHandView();
-      actionId = NONE;
-    } else if (hand.addCard(deck.getCardById(id))) {
-      click.play();
-      if (discard.containsId(id)) {
-        discard.deleteCardById(id);
-      }
-      updateHandView();
-      actionId = NONE;
-    }
+  if (hand.addCard(deck.getCardById(id))) {
+    click.play();
+    updateHandView();
+    actionId = NONE;
+    selectedCard = NONE;
+    borgCubeIx = NONE;
   }
 }
 
 function selectFromHand(id) {
   const card = hand.getCardById(id);
-  if (card.cursedItem) {
-    removeFromHand(id);
-  } else if (actionId === BOOK_OF_CHANGES) {
-    if (id !== BOOK_OF_CHANGES) {
-      click.play();
-      bookOfChangesSelectedCard = id;
-      performBookOfChanges();
-    }
-  } else if (actionId === DOPPELGANGER) {
-    if (id !== DOPPELGANGER) {
-      actionId = NONE;
-      click.play();
+  if (actionId === THOUGHT_MAKER) {
+    if (card.lifeform.length > 0) {
+      selectedCard = card.id;
       magic.play();
-      var doppelGanger = hand.getCardById(DOPPELGANGER);
-      doppelGanger.actionData = [id];
       updateHandView();
     }
-  } else if (actionId === ISLAND) {
-    var selectedCard = hand.getCardById(id);
-    var island = hand.getCardById(ISLAND);
-    if (selectedCard.suit === 'flood' || selectedCard.suit === 'flame') {
-      actionId = NONE;
-      click.play();
+  } else if (actionId === BORG_CUBE) {
+    var borgCube = hand.getCardById(BORG_CUBE);
+    if (!card.type.includes('mission') && (borgCube.actionData === undefined || !borgCube.actionData.includes(card.id))) {
+      if (borgCube.actionData === undefined) {
+        borgCube.actionData = [];
+      }
+      borgCube.actionData[borgCubeIx] = card.id;
       magic.play();
-      island.actionData = [id];
       updateHandView();
     }
-  } else if (actionId === CH_ANGEL) {
-    actionId = NONE;
-    click.play();
-    magic.play();
-    var angel = hand.getCardById(CH_ANGEL);
-    angel.actionData = [id];
-    updateHandView();  
-  } else if (actionId === NONE) {
+  } else {
     removeFromHand(id);
   }
 }
 
 function removeFromHand(id) {
-  swoosh.play();
-  hand.deleteCardById(id);
-  updateHandView();
-}
-
-function removeFromDiscard(id) {
-  swoosh.play();
-  discard.deleteCardById(id);
-  updateDiscardAreaView();
+  if (hand.deleteCardById(id)) {
+    swoosh.play();
+    updateHandView();
+  }
 }
 
 function updateHandView() {
   var template = Handlebars.compile($("#hand-template").html());
-  var score = hand.score(discard);
+  var score = hand.score();
   var html = template({
-    playerCards: hand.faceDownCursedItems().concat(hand.cards()),
-    playerCount: playerCount,
-    playerCounts: [2, 3, 4, 5, 6]
+    playerCards: hand.cards(),
+    thoughtMakerTarget: actionId === THOUGHT_MAKER ? selectedCard : ''
   }, {
     allowProtoMethodsByDefault: true
   });
@@ -289,41 +154,10 @@ function updateHandView() {
   updateUrl();
 }
 
-function updateDiscardAreaView() {
-  var template = Handlebars.compile($("#discard-template").html());
-  var score = hand.score(discard);
-  var html = template({
-    discard: discard.cards()
-  }, {
-    allowProtoMethodsByDefault: true
-  });
-  $('#discard').html(html);
-  if (score >= 0) {
-    $('#points').text(('000' + score).slice(-3));
-  } else {
-    $('#points').text('-' + ('000' + Math.abs(score)).slice(-3));
-  }
-  updateUrl();
-}
-
 function updateUrl() {
   var params = [];
-  if (cursedHoardItems || cursedHoardSuits) {
-    var expansions = [];
-    if (cursedHoardItems) {
-      expansions.push('ch_items');
-    }
-    if (cursedHoardSuits) {
-      expansions.push('ch_suits')
-    }
-    params.push('expansions=' + expansions.join(','));
-    params.push('playerCount=' + playerCount);
-  }
   if (!hand.empty()) {
     params.push('hand=' + hand.toString());
-  }
-  if (discard.size() > 0) {
-    params.push('discard=' + discard.toString());
   }
   if (params.length > 0) {
     history.replaceState(null, null, "index.html?" + params.join('&'));
@@ -343,37 +177,15 @@ function getHandFromQueryString() {
   updateHandView();
 }
 
-function getDiscardFromQueryString() {
-  var params = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-  for (var i = 0; i < params.length; i++) {
-    var param = params[i].split('=');
-    if (param[0] === 'discard') {
-      discard.loadFromString(decodeURIComponent(param[1]));
-    }
-  }
-}
-
 function useCardAction(id) {
   click.play();
   actionId = id;
+  selectedCard = NONE;
+  borgCubeIx = NONE;
   hand.undoCardAction(id);
   showCards();
-  if (id === BOOK_OF_CHANGES) {
-    bookOfChangesSelectedCard = NONE;
-    bookOfChangesSelectedSuit = undefined;
-    var template = Handlebars.compile($("#suit-selection-template").html());
-    var html = template({
-      suits: deck.suits()
-    }, {
-      allowProtoMethodsByDefault: true
-    });
-    $('#cards').html(html);
-  } else if ([SHAPESHIFTER, CH_SHAPESHIFTER, MIRAGE, CH_MIRAGE].includes(id)) {
-    var duplicator = hand.getCardById(id);
-    showCards(duplicator.card.relatedSuits);
-  }
   updateHandView();
-  $('#card-action-text-' + id).text(jQuery.i18n.prop(id + '.action'));
+  $('#card-action-text-' + id).html(jQuery.i18n.prop(id + '.action'));
   $('#card-action-use-' + id).hide();
   $('#card-action-cancel-' + id).show();
 }
@@ -382,53 +194,65 @@ function cancelCardAction(id) {
   click.play();
   hand.undoCardAction(id)
   actionId = NONE;
-  bookOfChangesSelectedCard = NONE;
-  bookOfChangesSelectedSuit = undefined;
+  selectedCard = NONE;
+  borgCubeIx = NONE;
   $('#card-action-cancel-' + id).hide();
   $('#card-action-use-' + id).show();
   showCards();
   updateHandView();
 }
 
-function performBookOfChanges() {
-  if (bookOfChangesSelectedCard !== NONE && bookOfChangesSelectedSuit !== undefined) {
+function useBorgCube(ix) {
+  click.play();
+  actionId = BORG_CUBE;
+  borgCubeIx = ix;
+  selectedCard = NONE;
+  var borgCube = hand.getCardById(BORG_CUBE);
+  if (borgCube.actionData !== undefined) {
+    delete borgCube.actionData[ix];
+  }
+  showCards();
+  updateHandView();
+  $('#card-action-text-M02').html(jQuery.i18n.prop('M02.action'));
+  $('#borg-cube-' + ix).hide();
+  $('#cancel-borg-cube-' + ix).show();
+}
+
+function cancelBorgCube(ix) {
+  click.play();
+  actionId = NONE;
+  borgCubeIx = NONE;
+  selectedCard = NONE;
+  var borgCube = hand.getCardById(BORG_CUBE);
+  if (borgCube.actionData !== undefined) {
+    delete borgCube.actionData[ix];
+  }
+  showCards();
+  updateHandView();
+}
+
+function modifyUnidentifiedShip() {
+  var unidentifiedShip = hand.getCardById(UNIDENTIFIED_SHIP);
+  if (unidentifiedShip !== undefined) {
     magic.play();
-    var bookOfChanges = hand.getCardById(BOOK_OF_CHANGES);
-    bookOfChanges.actionData = [bookOfChangesSelectedCard, bookOfChangesSelectedSuit];
-    showCards();
-    updateHandView();
-    actionId = NONE;
+    unidentifiedShip.actionData = [$('#G48-type').val(), $('#G48-lifeform').val(), $('#G48-affiliation').val(), $('#G48-specialty').val()];
+    updateHandView();  
   }
 }
 
-function selectSuit(suit) {
-  click.play();
-  bookOfChangesSelectedSuit = suit;
-  performBookOfChanges();
+function modifyThoughtMakerAffiliation() {
+  var thoughtMaker = hand.getCardById(THOUGHT_MAKER);
+  if (thoughtMaker !== undefined) {
+    magic.play();
+    thoughtMaker.actionData = [selectedCard, $('#G41-affiliation').val()];
+    updateHandView();
+  }
 }
 
-function switchToDiscardArea() {
-  click.play();
-  inputDiscardArea = true;
-  updateDiscardAreaView();
-  showCards(allSuits());
-  $("#hand").hide();
-  $("#discard").show();
-}
-
-function switchToHand() {
-  click.play();
-  inputDiscardArea = false;
-  updateHandView();
-  showCards();
-  $("#discard").hide();
-  $("#hand").show();
-}
-
-function showCards(suits) {
+function showCards(types) {
   var template = Handlebars.compile($("#cards-template").html());
   var html = template({
-    suits: deck.getCardsBySuit(suits),
+    types: deck.getCardsByType(types),
   }, {
     allowProtoMethodsByDefault: true
   });
