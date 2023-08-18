@@ -17,7 +17,8 @@ Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
 });
 
 var languages = {
-  'en': 'English'
+  'en': 'English',
+  'de': 'Deutsch'
 }
 
 $(document).ready(function() {
