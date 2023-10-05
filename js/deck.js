@@ -695,7 +695,7 @@ var galaxyCards = {
     calculateScore: function(hand) {
       var total = 0;
       for (const card of hand.nonBlankedCards()) {
-        if (card.specialty.includes('archaeoligist') || (card.id !== 'G43' && card.specialty.includes('cosmic'))) {
+        if (card.specialty.includes('archaeologist') || (card.id !== 'G43' && card.specialty.includes('cosmic'))) {
           total += 6;
         }
       }
