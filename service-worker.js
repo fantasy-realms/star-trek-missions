@@ -19,7 +19,7 @@ var URLS = [
   'js/bootstrap.bundle.min.js',
   'js/handlebars.min-v4.7.7.js',
   'js/jquery.i18n.properties.min.js',
-  'js/jquery-3.6.0.min.js',
+  'js/jquery-3.7.1.min.js',
   'i18n/Messages.properties',
   'sound/clear.mp3',
   'sound/click.mp3',

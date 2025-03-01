@@ -73,9 +73,15 @@ main {
 }
 
 #hand-info {
-  font-size: 2.4rem;
+  font-size: 1.2rem;
   font-weight: bold;
   margin-right: 0.6rem;
+}
+
+@media (min-width: 380px) {
+  #hand-info {
+    font-size: 2.4rem;
+  }
 }
 
 #points {
@@ -303,7 +309,6 @@ li.system.location {
   margin-top: 0px;
   margin-bottom: 0px;
   padding-top: 0px;
-  margin-bottom: 0px;
 }
 
 #hand li span {
