@@ -1,6 +1,6 @@
 Handlebars.registerHelper('i18n', function() {
-  var key = '';
-  for (var arg in arguments) {
+  let key = '';
+  for (let arg in arguments) {
     if (typeof arguments[arg] != 'object') {
         key += arguments[arg];
     }
@@ -16,7 +16,7 @@ Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
   return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
 
-var languages = {
+const languages = {
   'en': 'English',
   'de': 'Deutsch'
 }
@@ -41,13 +41,13 @@ $(document).ready(function() {
   });
 });
 
-var click = new Audio('sound/click.mp3');
-var swoosh = new Audio('sound/swoosh.mp3');
-var clear = new Audio('sound/clear.mp3');
-var magic = new Audio('sound/magic.mp3');
-var actionId = NONE;
-var selectedCard = NONE;
-var borgCubeIx = NONE;
+const click = new Audio('sound/click.mp3');
+const swoosh = new Audio('sound/swoosh.mp3');
+const clear = new Audio('sound/clear.mp3');
+const magic = new Audio('sound/magic.mp3');
+let actionId = NONE;
+let selectedCard = NONE;
+let borgCubeIx = NONE;
 
 function selectLanguage(lang) {
   localStorage.setItem('language', lang);
@@ -110,7 +110,7 @@ function selectFromHand(id) {
       updateHandView();
     }
   } else if (actionId === BORG_CUBE) {
-    var borgCube = hand.getCardById(BORG_CUBE);
+    let borgCube = hand.getCardById(BORG_CUBE);
     if (!card.type.includes('mission') && (borgCube.actionData === undefined || !borgCube.actionData.includes(card.id))) {
       if (borgCube.actionData === undefined) {
         borgCube.actionData = [];
@@ -132,9 +132,9 @@ function removeFromHand(id) {
 }
 
 function updateHandView() {
-  var template = Handlebars.compile($("#hand-template").html());
-  var score = hand.score();
-  var html = template({
+  let template = Handlebars.compile($("#hand-template").html());
+  let score = hand.score();
+  let html = template({
     playerCards: hand.cards(),
     thoughtMakerTarget: actionId === THOUGHT_MAKER ? selectedCard : ''
   }, {
@@ -152,7 +152,7 @@ function updateHandView() {
 }
 
 function updateUrl() {
-  var params = [];
+  let params = [];
   if (!hand.empty()) {
     params.push('hand=' + hand.toString());
   }
@@ -164,9 +164,9 @@ function updateUrl() {
 }
 
 function getHandFromQueryString() {
-  var params = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-  for (var i = 0; i < params.length; i++) {
-    var param = params[i].split('=');
+  let params = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  for (const element of params) {
+    let param = element.split('=');
     if (param[0] === 'hand') {
       hand.loadFromString(decodeURIComponent(param[1]).replace(/ /g, '+'));
     }
@@ -204,7 +204,7 @@ function useBorgCube(ix) {
   actionId = BORG_CUBE;
   borgCubeIx = ix;
   selectedCard = NONE;
-  var borgCube = hand.getCardById(BORG_CUBE);
+  let borgCube = hand.getCardById(BORG_CUBE);
   if (borgCube.actionData !== undefined) {
     delete borgCube.actionData[ix];
   }
@@ -220,7 +220,7 @@ function cancelBorgCube(ix) {
   actionId = NONE;
   borgCubeIx = NONE;
   selectedCard = NONE;
-  var borgCube = hand.getCardById(BORG_CUBE);
+  let borgCube = hand.getCardById(BORG_CUBE);
   if (borgCube.actionData !== undefined) {
     delete borgCube.actionData[ix];
   }
@@ -229,7 +229,7 @@ function cancelBorgCube(ix) {
 }
 
 function modifyUnidentifiedShip() {
-  var unidentifiedShip = hand.getCardById(UNIDENTIFIED_SHIP);
+  let unidentifiedShip = hand.getCardById(UNIDENTIFIED_SHIP);
   if (unidentifiedShip !== undefined) {
     magic.play();
     unidentifiedShip.actionData = [$('#G48-type').val(), $('#G48-lifeform').val(), $('#G48-affiliation').val(), $('#G48-specialty').val()];
@@ -238,7 +238,7 @@ function modifyUnidentifiedShip() {
 }
 
 function modifyThoughtMakerAffiliation() {
-  var thoughtMaker = hand.getCardById(THOUGHT_MAKER);
+  let thoughtMaker = hand.getCardById(THOUGHT_MAKER);
   if (thoughtMaker !== undefined) {
     magic.play();
     thoughtMaker.actionData = [selectedCard, $('#G41-affiliation').val()];
@@ -247,8 +247,8 @@ function modifyThoughtMakerAffiliation() {
 }
 
 function showCards(types) {
-  var template = Handlebars.compile($("#cards-template").html());
-  var html = template({
+  let template = Handlebars.compile($("#cards-template").html());
+  let html = template({
     types: deck.getCardsByType(types),
   }, {
     allowProtoMethodsByDefault: true

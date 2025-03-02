@@ -48,7 +48,7 @@ class Hand {
   }
 
   countCardName(cardName) {
-    var count = 0;
+    let count = 0;
     for (const card of this.nonBlankedCards()) {
       if (card.name === cardName) {
         count++;
@@ -78,7 +78,7 @@ class Hand {
   }
 
   score() {
-    var score = 0;
+    let score = 0;
     this._resetHand();
     this._performCardActions();
     this._applyBlanking();
@@ -94,7 +94,7 @@ class Hand {
   }
 
   _missionCount() {
-    var missions = 0;
+    let missions = 0;
     for (const card of this.cards()) {
       if (card.type.includes('mission')) {
         missions++;
@@ -111,7 +111,7 @@ class Hand {
 
   _performCardActions() {
     for (const cardAction of ACTION_ORDER) {
-      var actionCard = this.getCardById(cardAction);
+      let actionCard = this.getCardById(cardAction);
       if (actionCard !== undefined) {
         actionCard.performCardAction(this);
       }
@@ -145,7 +145,7 @@ class Hand {
   }
 
   toString() {
-    var actions = [];
+    let actions = [];
     for (const card of this.cards()) {
       if (card.actionData !== undefined) {
         actions.push(card.id + ':' + card.actionData.join(':'));
@@ -155,9 +155,9 @@ class Hand {
   }
 
   loadFromString(string) {
-    var parts = string.split('+');
-    var cardIds = parts[0].split(',');
-    var cardActions = parts[1].split(',').map(action => action.split(':'));
+    let parts = string.split('+');
+    let cardIds = parts[0].split(',');
+    let cardActions = parts[1].split(',').map(action => action.split(':'));
     this.loadFromArrays(cardIds, cardActions);
   }
 
@@ -168,22 +168,22 @@ class Hand {
     }
     for (const cardAction of cardActions) {
       if (cardAction.length > 1) {
-        var cardId = cardAction[0];
-        var action = cardAction.slice(1);
-        var actionCard = this.getCardById(cardId);
+        let cardId = cardAction[0];
+        let action = cardAction.slice(1);
+        let actionCard = this.getCardById(cardId);
         this.cardsInHand[cardId] = new CardInHand(actionCard.card, action);
       }
     }
   }
 
   undoCardAction(id) {
-    var actionCard = this.getCardById(id);
+    let actionCard = this.getCardById(id);
     this.cardsInHand[id] = new CardInHand(actionCard.card, undefined);
   }
 
 }
 
-var hand = new Hand();
+let hand = new Hand();
 
 class CardInHand {
 
@@ -223,11 +223,11 @@ class CardInHand {
           this.specialty = [this.actionData[3]];
         }
       } else if (this.id === THOUGHT_MAKER) {
-        var target = hand.getCardById(this.actionData[0]);
+        let target = hand.getCardById(this.actionData[0]);
         if (target === undefined) {
           this.actionData = undefined;
         } else {
-          var affiliation = this.actionData[1];
+          let affiliation = this.actionData[1];
           target.affiliation = [affiliation];
           target.magic = true;
         }

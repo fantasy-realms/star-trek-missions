@@ -1,4 +1,4 @@
-var galaxyCards = {
+const galaxyCards = {
   'G01': {
     id: 'G01',
     name: 'Ambassador K\'Ehleyr',
@@ -18,7 +18,7 @@ var galaxyCards = {
     lifeform: ['vulcan'],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (!card.affiliation.includes('federation') && card.type.includes('captain')) {
           total += 5;
@@ -35,7 +35,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var count = 0;
+      let count = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes('klingon') || card.affiliation.includes('klingon-empire')) {
           count++;
@@ -52,7 +52,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.affiliation.includes('federation') && (card.type.includes('personnel') || card.type.includes('system'))) {
           total += 3;
@@ -69,7 +69,7 @@ var galaxyCards = {
     lifeform: ['human'],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.name === 'Bridge') {
           total += 5;
@@ -89,7 +89,7 @@ var galaxyCards = {
     lifeform: ['klingon'],
     affiliation: ['klingon-empire'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.id !== 'G06' && (card.lifeform.includes('klingon') || card.affiliation.includes('klingon-empire'))) {
           total += 5;
@@ -106,7 +106,7 @@ var galaxyCards = {
     lifeform: ['human'],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('android') || card.lifeform.includes('hologram')) {
           total += 5;
@@ -134,7 +134,7 @@ var galaxyCards = {
     lifeform: ['romulan'],
     affiliation: ['romulan-star-empire'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.affiliation.includes('hostile') || card.affiliation.includes('klingon-empire')) {
           total += 4;
@@ -151,13 +151,13 @@ var galaxyCards = {
     lifeform: ['romulan'],
     affiliation: ['romulan-star-empire'],
     calculateScore: function(hand) {
-      var federationCards = [];
+      let federationCards = [];
       for (const card of hand.nonBlankedCards()) {
         if (card.affiliation.includes('federation')) {
           federationCards.push(card);
         }
       }
-      var uniqueSpecialtyCount = countUniqueTags(federationCards, 'specialty');
+      let uniqueSpecialtyCount = countUniqueTags(federationCards, 'specialty');
       return uniqueSpecialtyCount >= 3 ? 13 : 0;
     }
   },
@@ -182,7 +182,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('cosmic')) {
           total += 6;
@@ -199,7 +199,7 @@ var galaxyCards = {
     lifeform: ['betazoid', 'human'],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var cards = [];
+      let cards = [];
       for (const card of hand.nonBlankedCards()) {
         if (card.id !== 'G13') {
           cards.push(card);
@@ -216,7 +216,7 @@ var galaxyCards = {
     lifeform: ['crystal'],
     affiliation: ['hostile'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('combat')) {
           total += 6;
@@ -245,7 +245,7 @@ var galaxyCards = {
     lifeform: ['ferengi'],
     affiliation: ['ferengi-alliance'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes('betazoid')) {
           total += 8;
@@ -274,7 +274,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.id !== 'G18' && card.specialty.includes('engineer')) {
           total += 6;
@@ -291,10 +291,10 @@ var galaxyCards = {
     lifeform: ['human'],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var max = 0;
+      let max = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.id !== 'G19' && (card.type.includes('system') || card.specialty.includes('engineer'))) {
-          var score = card.score(hand);
+          let score = card.score(hand);
           if (score > max) {
             max = score;
           }
@@ -327,7 +327,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes('hologram')) {
           total += 8;
@@ -346,7 +346,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes('hologram')) {
           total += 8;
@@ -368,7 +368,7 @@ var galaxyCards = {
       return !(hand.contains('Holodeck 1') || hand.contains('Holodeck 2') || hand.contains('Computer'));
     },
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('science') || card.specialty.includes('engineer')) {
           total += 8;
@@ -392,7 +392,7 @@ var galaxyCards = {
       }
     },
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.name === 'Lieutenant Geordi La Forge' || card.name === 'Engine Room') {
           total += 9;
@@ -423,7 +423,7 @@ var galaxyCards = {
     lifeform: ['human'],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('system') || card.name === 'Engine Room') {
           total += 4;
@@ -440,7 +440,7 @@ var galaxyCards = {
     lifeform: ['klingon'],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('weapon') || (card.id !== 'G27' && card.specialty.includes('combat'))) {
           total += 4;
@@ -470,7 +470,7 @@ var galaxyCards = {
     lifeform: ['klingon'],
     affiliation: ['klingon-empire'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes('romulan') || card.affiliation.includes('romulan-star-empire')) {
           total += 7;
@@ -533,7 +533,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var federationCharacters = 0;
+      let federationCharacters = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.affiliation.includes('federation') && (card.type.includes('personnel') || card.type.includes('civilian') || card.type.includes('captain'))) {
           federationCharacters++;
@@ -561,9 +561,9 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var personnel = [];
-      var nonFederation = [];
-      var combatOrWeapon = [];
+      let personnel = [];
+      let nonFederation = [];
+      let combatOrWeapon = [];
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('personnel')) {
           personnel.push(card);
@@ -586,7 +586,7 @@ var galaxyCards = {
     lifeform: ['ferengi'],
     affiliation: ['ferengi-alliance'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('artifact')) {
           total += 8;
@@ -603,7 +603,7 @@ var galaxyCards = {
     lifeform: ['vulcan'],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes('romulan') || card.name === 'Ambassador Sarek' || card.name === 'Lieutenant Commander Data') {
           total += 6;
@@ -636,7 +636,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.affiliation.includes('federation') && (card.type.includes('personnel') || card.type.includes('civilian'))) {
           total += 4;
@@ -666,7 +666,7 @@ var galaxyCards = {
     affiliation: ['ferengi-alliance'],
     action: true,
     calculateScore: function(hand) {
-      var thoughtMaker = hand.getCardById('G41');
+      let thoughtMaker = hand.getCardById('G41');
       if (thoughtMaker.actionData !== undefined && thoughtMaker.actionData.length) {
         return 5;
       }
@@ -693,7 +693,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('archaeologist') || (card.id !== 'G43' && card.specialty.includes('cosmic'))) {
           total += 6;
@@ -721,7 +721,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var personnel = [];
+      let personnel = [];
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('personnel')) {
           personnel.push(card);
@@ -738,7 +738,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.id !== 'G46' && (card.specialty.includes('medical') || card.specialty.includes('science'))) {
           total += 9;
@@ -755,7 +755,7 @@ var galaxyCards = {
     lifeform: [],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var otherLocations = 0;
+      let otherLocations = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.id !== 'G47' && card.type.includes('location')) {
           otherLocations++;
@@ -783,7 +783,7 @@ var galaxyCards = {
     lifeform: ['human'],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if ((card.id !== 'G49' && card.specialty.includes('archaeologist')) || card.type.includes('artifact') || card.name === 'Meddlesome Q') {
           total += 7;
@@ -800,7 +800,7 @@ var galaxyCards = {
     lifeform: ['human'],
     affiliation: ['federation'],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.id !== 'G50' && card.affiliation.includes('federation') && card.specialty.includes('command')) {
           total += 7;
@@ -811,7 +811,7 @@ var galaxyCards = {
   }
 }
 
-var missions = {
+const missions = {
   'M01': {
     id: 'M01',
     name: 'Away Team',
@@ -820,8 +820,8 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var personnel = [];
-      var total = 0;
+      let personnel = [];
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.name === 'Transporter' || card.name === 'Tricorder' || card.name === 'Hand Phaser') {
           total += 5;
@@ -841,7 +841,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('captain') || card.specialty.includes('combat') || card.specialty.includes('security')) {
           total += 5;
@@ -858,7 +858,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('system') || card.lifeform.includes('hologram')) {
           total += 7;
@@ -875,7 +875,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var commandCardAffiliations = [];
+      let commandCardAffiliations = [];
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('command')) {
           for (const affiliation of card.affiliation) {
@@ -897,8 +897,8 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
-      var captains = [];
+      let total = 0;
+      let captains = [];
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('ambassador')) {
           total += 5;
@@ -918,7 +918,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.name === 'Bridge' || card.name === 'Tractor Beam' || card.name === 'Transporter' || card.specialty.includes('medical')) {
           total += 9;
@@ -935,7 +935,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes('hologram') || card.lifeform.includes('android') || card.name === 'Vice Admiral Nakamura' || card.name === 'Commander Bruce Maddox') {
           total += 9;
@@ -952,8 +952,8 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var romulanFerengiOrHostile = [];
-      var betazoidOrAmbassador = [];
+      let romulanFerengiOrHostile = [];
+      let betazoidOrAmbassador = [];
       for (const card of hand.nonBlankedCards()) {
         if (card.affiliation.includes('romulan-star-empire') || card.affiliation.includes('ferengi-alliance') || card.affiliation.includes('hostile')) {
           romulanFerengiOrHostile.push(card);
@@ -973,7 +973,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('engineer') || card.type.includes('system') || card.type.includes('location')) {
           total += 5;
@@ -990,8 +990,8 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var cardsWithLifeform = [];
-      var federationCommand = [];
+      let cardsWithLifeform = [];
+      let federationCommand = [];
       for (const card of hand.nonBlankedCards()) {
         if (card.affiliation.includes('federation') && card.specialty.includes('command')) {
           federationCommand.push(card);
@@ -1016,7 +1016,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.affiliation.length > 0 && !card.affiliation.includes('federation')) {
           total += 6;
@@ -1033,7 +1033,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('engineer')) {
           total += 8;
@@ -1058,7 +1058,7 @@ var missions = {
       return true;
     },
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('security') || card.specialty.includes('weapon')) {
           total += 12;
@@ -1075,7 +1075,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes('klingon') || card.lifeform.includes('romulan') || card.affiliation.includes('klingon-empire') || card.affiliation.includes('romulan-star-empire')) {
           total += 8;
@@ -1092,7 +1092,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes('betazoid') || card.lifeform.includes('vulcan') || card.name === 'Computer' || card.name === 'Tricorder') {
           total += 8;
@@ -1109,8 +1109,8 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var personnel = [];
-      var counselorOrFederationCaptain = [];
+      let personnel = [];
+      let counselorOrFederationCaptain = [];
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('personnel')) {
           personnel.push(card);
@@ -1130,7 +1130,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var lifeformScores = {};
+      let lifeformScores = {};
       for (const card of hand.nonBlankedCards()) {
         for (const lifeform of card.lifeform) {
           if (lifeform !== 'android' && lifeform !== 'hologram'
@@ -1146,7 +1146,7 @@ var missions = {
       }
       const chosenLifeform = Object.keys(lifeformScores).reduce(function(a, b){ return lifeformScores[a] > lifeformScores[b] ? a : b }, undefined);
       const chosenLifeformValue = (chosenLifeform === 'human' ? 5 : 8);
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.lifeform.includes(chosenLifeform)) {
           total += chosenLifeformValue;
@@ -1176,9 +1176,9 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var characters = [];
-      var counselorOrBetazoid = [];
-      var total = 0;
+      let characters = [];
+      let counselorOrBetazoid = [];
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('personnel') || card.type.includes('civilian') || card.type.includes('captain')) {
           characters.push(card);
@@ -1189,7 +1189,7 @@ var missions = {
       }
       if (characters.length >= 2) {
         total += 8;
-        var nonCounselorOrBetazoidCharacters = characters.filter(c => !counselorOrBetazoid.includes(c));
+        let nonCounselorOrBetazoidCharacters = characters.filter(c => !counselorOrBetazoid.includes(c));
         total += (counselorOrBetazoid.length + Math.min(0, nonCounselorOrBetazoidCharacters.length - 2)) * 6;
         if (hand.contains('Quarters')) {
           total += 6;
@@ -1206,7 +1206,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.type.includes('artifact') || card.specialty.includes('cosmic') || card.specialty.includes('science')) {
           total += 6;
@@ -1231,8 +1231,8 @@ var missions = {
       return true;
     },
     calculateScore: function(hand) {
-      var total = 0;
-      var nonCommandNonCombatUnblankerFound = false;
+      let total = 0;
+      let nonCommandNonCombatUnblankerFound = false;
       for (const card of hand.nonBlankedCards()) {
         if (card.specialty.includes('command') || card.specialty.includes('combat')) {
           total += 6;
@@ -1254,7 +1254,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.affiliation.includes('ferengi-alliance') || card.type.includes('artifact') || card.specialty.includes('archaeologist')) {
           total += 7;
@@ -1271,7 +1271,7 @@ var missions = {
     lifeform: [],
     affiliation: [],
     calculateScore: function(hand) {
-      var total = 0;
+      let total = 0;
       for (const card of hand.nonBlankedCards()) {
         if (card.name === 'Ten-Forward' || card.specialty.includes('cosmic')) {
           total += 10;
@@ -1301,7 +1301,7 @@ var missions = {
   }
 }
 
-var deck = {
+const deck = {
   galaxyCards: galaxyCards,
   missions: missions,
   getCardByName: function(cardName) {
@@ -1322,7 +1322,7 @@ var deck = {
     return this.galaxyCards[id] || this.missions[id];
   },
   getCardsByType: function(types) {
-    var cardsByType = {};
+    let cardsByType = {};
     for (const cardType of allTypes()) {
       if (types === undefined || types.includes(cardType)) {
         cardsByType[cardType] = [];   
@@ -1353,7 +1353,7 @@ function allTypes() {
 
 function countUniqueTags(cards, tag) {
   cards = cards.sort((a, b) => a[tag].length - b[tag].length);
-  var uniqueTags = [];
+  let uniqueTags = [];
   for (const card of cards) {
     for (const t of card[tag]) {
       if (!uniqueTags.includes(t)) {
@@ -1367,7 +1367,7 @@ function countUniqueTags(cards, tag) {
 
 function hasUniqueCards(cardSets) {
   cardSets = cardSets.sort((a, b) => a.length - b.length);
-  var uniqueCards = [];
+  let uniqueCards = [];
   for (const cardSet of cardSets) {
     for (const card of cardSet) {
       if (!uniqueCards.includes(card)) {
@@ -1380,8 +1380,8 @@ function hasUniqueCards(cardSets) {
 }
 
 function calculateCombatSystemScore(id, hand) {
-  var total = 0;
-  var nonFederationCaptains = [];
+  let total = 0;
+  let nonFederationCaptains = [];
   for (const card of hand.nonBlankedCards()) {
     if (!card.affiliation.includes('federation') && card.type.includes('captain')) {
       nonFederationCaptains.push(card);
@@ -1392,7 +1392,7 @@ function calculateCombatSystemScore(id, hand) {
   }
   if (nonFederationCaptains.length > 0) {
     total += 6;
-    var nonCombatNonFederationCaptainFound = false;
+    let nonCombatNonFederationCaptainFound = false;
     for (const nonFederationCaptain of nonFederationCaptains) {
       if (!nonFederationCaptain.specialty.includes('combat')) {
         nonCombatNonFederationCaptainFound = true;
@@ -1406,10 +1406,10 @@ function calculateCombatSystemScore(id, hand) {
   return total;
 }
 
-var NONE = -1;
-var THOUGHT_MAKER = 'G41';
-var UNIDENTIFIED_SHIP = 'G48';
-var BORG_CUBE = 'M02';
-var MEDDLESOME_Q = 'M18';
+const NONE = -1;
+const THOUGHT_MAKER = 'G41';
+const UNIDENTIFIED_SHIP = 'G48';
+const BORG_CUBE = 'M02';
+const MEDDLESOME_Q = 'M18';
 
-var ACTION_ORDER = [UNIDENTIFIED_SHIP, THOUGHT_MAKER, BORG_CUBE];
+const ACTION_ORDER = [UNIDENTIFIED_SHIP, THOUGHT_MAKER, BORG_CUBE];
