@@ -61,6 +61,7 @@ function selectLanguage(lang) {
     callback: function() {
       swoosh.play();
       showCards();
+      updateHandView();
       updateLabels(lang);
     }
   });
@@ -147,11 +148,6 @@ function updateHandView() {
   }
   $('#cardCount').text(hand.size());
   $('#cardLimit').text(hand.limit());
-  if (hand.empty()) {
-    $('#settings').show();
-  } else {
-    $('#settings').hide();
-  }
   updateUrl();
 }
 
