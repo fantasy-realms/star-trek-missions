@@ -27,7 +27,7 @@ function assertScoreByCode(code, expectedScore, message) {
 }
 
 function assertScore(hand, expectedScore, message) {
-  var score = hand.score();
+  let score = hand.score();
   if (score === expectedScore) {
     $('#tests').append('<li class="list-group-item list-group-item-success"><b>TEST SUCCESS</b> &nbsp;<a href="index.html?hand=' +
       hand.toString() + '">' + hand.cardNames().join() + '</a>&nbsp; scored ' + score + ' points' +

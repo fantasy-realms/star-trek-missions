@@ -1,7 +1,7 @@
-var APP_PREFIX = 'star-trek-missions-';
-var VERSION = '0.0.2';
-var CACHE_NAME = APP_PREFIX + VERSION;
-var URLS = [
+const APP_PREFIX = 'star-trek-missions-';
+const VERSION = '0.0.2';
+const CACHE_NAME = APP_PREFIX + VERSION;
+const URLS = [
   '/',
   'index.html',
   'manifest.json',
@@ -82,7 +82,7 @@ self.addEventListener('install', function (e) {
 self.addEventListener('activate', function (e) {
   e.waitUntil(
     caches.keys().then(function (keyList) {
-      var cacheWhitelist = keyList.filter(function (key) {
+      let cacheWhitelist = keyList.filter(function (key) {
         return key.indexOf(APP_PREFIX);
       });
       cacheWhitelist.push(CACHE_NAME);

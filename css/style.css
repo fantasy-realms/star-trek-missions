@@ -44,7 +44,7 @@ body {
 header {
   position: fixed;
   z-index: 1;
-  background-color: #384260;
+  background-color: rgb(52, 58, 64);
   height: 4rem;
   padding: 0.5rem;
   width: 100%;
@@ -271,20 +271,16 @@ li.system.location {
   cursor: pointer;
 }
 
-#hand, #settings {
+#hand {
   background-color: #e9e3c6;
   padding: 0.4rem;
   font-weight: bold;
 }
 
-#settings {
-  font-weight: normal;
-  color: var(--army-color);
-  font-size: small;
-}
-
-#language {
-  margin-top: 0.5rem;
+#settings .btn {
+  width: 100%;
+  margin-top: 0.05rem;
+  border-bottom: 1px solid rgba(0,0,0,.125);
 }
 
 #cards li, #hand li {

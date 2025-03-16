@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" manifest="star-trek-missions.appcache">
 
 <head>
@@ -237,12 +238,9 @@
     </header>
     <main>
       <div id="left">
-        <div id="cards" class="panel" role="tablist" aria-multiselectable="true"></div>
-      </div>
-      <div id="right">
-        <div id="settings" style="display: none;">
+        <div id="settings">
           <div id="language" class="dropdown">
-            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="language-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn btn-dark dropdown-toggle" type="button" id="language-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <img src="img/globe.png" style="height: 1rem;"></img>
               <span id="selected-language">English</span>
             </button>
@@ -251,13 +249,16 @@
               <a id="lang-de" class="dropdown-item" href="#" onclick="selectLanguage('de')">Deutsch</a>
             </div>
           </div>
-          <div id="sound">
+          <div id="sound" class="btn btn-dark">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="sound-state" checked>
               <label id="sound-label" class="custom-control-label" for="sound-state">Sound</label>
             </div>
           </div>
         </div>
+        <div id="cards" class="panel" role="tablist" aria-multiselectable="true"></div>
+      </div>
+      <div id="right">
         <div id="hand">
         </div>
       </div>
